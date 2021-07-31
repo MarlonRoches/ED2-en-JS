@@ -1,0 +1,22 @@
+{
+  "name": "ed2-en-js",
+  "version": "1.0.0",
+  "description": "Proyecto de ED2 2019 en JS con Express (original en c# .Net Core)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MarlonRoches/ED2-en-JS.git"
+  },
+  "author": "Marlon Roches",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MarlonRoches/ED2-en-JS/issues"
+  },
+  "homepage": "https://github.com/MarlonRoches/ED2-en-JS#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
