@@ -1,7 +1,9 @@
 const { json } = require('express');
 const express = require('express');
-const { stringify } = require('querystring');
-const fs = require('fs')
+const csv = require('csv-parser');
+const fs = require('fs');
+const { TIMEOUT } = require('dns');
+
 // const myFile = new File('./data/productos.json')
 // const { model } = require('mongoose');
 const router = express.Router()
@@ -10,7 +12,7 @@ class Producto {
     constructor(){
         this.id=0
         this.Nombre=''
-        this.Precio =''
+        this.Precio =0
     }
     id = Number
     Nombre = String
@@ -24,53 +26,77 @@ router.use(express.json())
 // • Actualizar los datos de un producto 
 
 router.get('/',(req,res)=>{
-    const [flag, data] = LeerArcihvo()
-    if(readed.result === false)
-    {
-        res.status(502).send(readed.cont)
-        
-    }else{
-        res.status(202).send(readed.cont)
-        
-    }
+    console.log(ValidarArchivo())
+
+   const lista = JSON.parse(LeerArcihvo())
+    res.status(202).send(lista)
 })
 
-router.post('/',(req,res)=>{
 
-    const content = JSON.stringify(req.body)
+router.post('/single',(req,res)=>{
 
-    
+    const content = req.body
+    const lista = JSON.parse(LeerArcihvo())
+    lista.push(content)
+    EscribirArchivo(JSON.stringify(lista))
+    res.status(202).send('ok')
 
-    
+})
+router.post('/csv',(req,res)=>{
+
+    const content = req.body
+    const lista = JSON.parse(LeerArcihvo())
+    const temp =[]
+    fs.createReadStream(content.route)
+    .pipe(csv())
+    .on('data', (row) => {
+    //   console.log(row)
+      temp.push(row)
+
+    })
+    .on('end', () => {
+      console.log('CSV file successfully processed');
+    });
+    console.log(temp)
+    EscribirArchivo(JSON.stringify(lista))
+    res.status(202).send('ok')
+    // const lista = JSON.parse(LeerArcihvo())
+    // lista.push(content)
+    // EscribirArchivo(JSON.stringify(lista))
+    // res.status(202).send('ok')
+
 })
 
-const LeerArcihvo =() =>
+function  LeerArcihvo() 
 {
-    fs.readFile('./data/productos.json', 'utf8' , (err, data) => {
-        if (err) {
-            return [false, err]
-        }else{
-            return [true, JSON.parse(data)]
-        }
-      })
+   
+      return fs.readFileSync('./data/productos.json','utf8')
 }
+
 const ValidarArchivo=()=>
 {
     if(fs.existsSync('./data/productos.json')){
         // console.log('existo')
         return true
     }else{
-        EscribirArchivo([])
+        fs.writeFile('./data/productos.json', JSON.stringify([]), err => {
+            if (err) {
+                console.log(err)
+            } else {
+                console.log("ARCHIVO VALIDADO")
+            }
+            })
+        return false
     }
 }
 
-const EscribirArchivo=(data)=>
+const EscribirArchivo=(stringData)=>
 {
-    fs.writeFile('./data/productos.json', data, err => {
+    fs.writeFile('./data/productos.json', stringData, err => {
         if (err) {
-            res.status(502).send(err)
+            console.log(err)
         } else {
-            res.status(202).send("OK")
+            console.log("ARCHIVO ACTUALIZADO")
         }
         })
 }
