@@ -1,0 +1,8 @@
+Para el manejo inventario debe contar con los siguientes métodos: 
+
+• Agregar un producto 
+• Agregar múltiples productos (vía un archivo .csv) 
+• Actualizar los datos de un producto 
+• Transferir unidades de una sucursal a otra 
+• Agregar un producto a una sucursal 
+• Actualizar cantidad en inventario en la sucursal 
