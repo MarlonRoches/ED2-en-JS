@@ -1,11 +1,8 @@
-const { json } = require('express');
 const express = require('express');
 const csv = require('csv-parser');
 const fs = require('fs');
-const { TIMEOUT } = require('dns');
+const common = require('../scripts/common');
 
-// const myFile = new File('./data/productos.json')
-// const { model } = require('mongoose');
 const router = express.Router()
 
 class Producto {
@@ -21,9 +18,9 @@ class Producto {
 
 
 router.use(express.json())
-// • Agregar un producto 
-// • Agregar múltiples productos (vía un archivo .csv) 
-// • Actualizar los datos de un producto 
+// • Agregar un producto
+// • Agregar múltiples productos (vía un archivo .csv)
+// • Actualizar los datos de un producto
 
 router.get('/',(req,res)=>{
     console.log(ValidarArchivo())
@@ -35,10 +32,7 @@ router.get('/',(req,res)=>{
 
 router.post('/single',(req,res)=>{
 
-    const content = req.body
-    const lista = JSON.parse(LeerArcihvo())
-    lista.push(content)
-    EscribirArchivo(JSON.stringify(lista))
+    GuardarElemento(req.body)
     res.status(202).send('ok')
 
 })
@@ -51,25 +45,26 @@ router.post('/csv',(req,res)=>{
     .pipe(csv())
     .on('data', (row) => {
     //   console.log(row)
-      temp.push(row)
-
+        const OBJ =  new Producto()
+        OBJ.Nombre = row.nombre
+        OBJ.Precio = Number.parseInt(row.precio)
+        OBJ.id = lista.length
+        lista.push(OBJ)
+        console.log('------------')
+        console.log(lista)
     })
     .on('end', () => {
-      console.log('CSV file successfully processed');
-    });
-    console.log(temp)
-    EscribirArchivo(JSON.stringify(lista))
-    res.status(202).send('ok')
-    // const lista = JSON.parse(LeerArcihvo())
-    // lista.push(content)
-    // EscribirArchivo(JSON.stringify(lista))
-    // res.status(202).send('ok')
 
+        console.log('-> Finalle')
+        // console.log('CSV file successfully processed');
+        EscribirArchivo(JSON.stringify(lista))
+        console.log('Archivo Actualizado')
+    });
+    res.status(202).send('to piola')
 })
 
-function  LeerArcihvo() 
+function  LeerArcihvo()
 {
-   
       return fs.readFileSync('./data/productos.json','utf8')
 }
 
@@ -90,14 +85,24 @@ const ValidarArchivo=()=>
     }
 }
 
+const GuardarElemento = (Node) =>
+{
+    const lista = JSON.parse(LeerArcihvo())
+    Node.id = lista.length
+    lista.push(Node)
+    EscribirArchivo(JSON.stringify(lista))
+
+}
 const EscribirArchivo=(stringData)=>
 {
-    fs.writeFile('./data/productos.json', stringData, err => {
-        if (err) {
-            console.log(err)
-        } else {
-            console.log("ARCHIVO ACTUALIZADO")
-        }
-        })
+    common.EscribirArchivo(stringData,'./data/productos.json')
+    
+    // fs.writeFile('./data/productos.json', stringData, err => {
+    //     if (err) {
+    //         console.log(err)
+    //     } else {
+    //         console.log("ARCHIVO ACTUALIZADO")
+    //     }
+    //     })
 }
 module.exports = router
