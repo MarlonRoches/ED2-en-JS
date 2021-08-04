@@ -12,5 +12,9 @@ function EscribirArchivo(stringData, route)
         })
 }
 
+function LeerArcihvo(ruta)
+{
+      return fs.readFileSync(ruta,'utf8')
+}
 //exportamos pa usarlo en otro lao
-module.exports = {EscribirArchivo}
+module.exports = {EscribirArchivo,LeerArcihvo}

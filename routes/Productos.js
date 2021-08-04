@@ -2,8 +2,8 @@ const express = require('express');
 const csv = require('csv-parser');
 const fs = require('fs');
 const common = require('../scripts/common');
-
 const router = express.Router()
+const ProductBD = require('../models/producto');
 
 class Producto {
     constructor(){
@@ -22,11 +22,19 @@ router.use(express.json())
 // • Agregar múltiples productos (vía un archivo .csv)
 // • Actualizar los datos de un producto
 
-router.get('/',(req,res)=>{
-    console.log(ValidarArchivo())
+router.get('/', async (req,res)=>{
 
-   const lista = JSON.parse(LeerArcihvo())
-    res.status(202).send(lista)
+    try {
+        const productosBD = await ProductBD.find()
+        // console.log(ValidarArchivo())
+        // const lista = JSON.parse(LeerArcihvo())
+        res.status(202).send(productosBD)
+
+    } catch (error) {
+        res.status(502).send(`error: ${error}`)
+        console.log('error:' , error )
+    }
+
 })
 
 
@@ -65,7 +73,7 @@ router.post('/csv',(req,res)=>{
 
 function  LeerArcihvo()
 {
-      return fs.readFileSync('./data/productos.json','utf8')
+      return common.LeerArcihvo('./data/productos.json')
 }
 
 const ValidarArchivo=()=>

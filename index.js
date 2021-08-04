@@ -1,7 +1,23 @@
 const express = require('express')
 const app =express()
+const port = process.env.PORT ||  3000
 
-const port = 3000
+const mongoose = require('mongoose');
+
+const user = "admin_ED2"
+const password = "ytmlDR0qqKiHhGVE"
+const dbName = "proyectoED2"
+
+const uri = `mongodb+srv://${user}:${password}@cluster0.c0tze.mongodb.net/${dbName}?retryWrites=true&w=majority`;
+
+mongoose.connect(uri, 
+    { 
+        //no mostrar mensajes en la consola
+        useNewUrlParser: true, useUnifiedTopology: true })
+        // exito
+  .then(()=> console.log('conectado a mongodb'))
+  //error 
+  .catch(e => console.log('error de conexión', e))
 
 app.get('/',(req,res)=>{
     res.send('to piola')

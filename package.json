@@ -18,6 +18,7 @@
   "homepage": "https://github.com/MarlonRoches/ED2-en-JS#readme",
   "dependencies": {
     "csv-parser": "^3.0.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mongoose": "^5.13.5"
   }
 }
