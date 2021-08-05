@@ -6,7 +6,7 @@ const productoSchema = new Schema({
     Precio : Number
 })
 
-const Producto =mongoose.model('Producto', productoSchema)
+const Producto =mongoose.model('productos', productoSchema)
 
 module.exports = Producto
 
