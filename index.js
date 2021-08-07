@@ -29,10 +29,20 @@ mongoose.connect(uri,
 
 
 app.get('/',(req,res)=>{
+    
     res.render('index', {
         titulo: "Hola pai"
     })
 })
+
+// app.get('/:val',(req,res)=>{
+  
+//     res.render('index', {
+//         titulo: "Hola pai",
+//         tagName: req.params.val
+//     })
+//     console.log(req.params.val)
+// })
 
 app.use('/manejo',require('./routes/Manejo'))
 app.use('/productos',require('./routes/Productos'))
@@ -43,7 +53,8 @@ app.use((req,res) => {
     // const url = req.originalUrl
     res.status(404).render('404', {
         titulo: req.originalUrl,
-        range : Date.now()
+        date : Date.now()
+        
     })
     console.log(req.originalUrl)
 })
