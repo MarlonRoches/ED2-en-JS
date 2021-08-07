@@ -4,18 +4,19 @@ const port = process.env.PORT || 3000
 const mongoose = require('mongoose');
 
 //variable de entorno
-
-
 const user = "admin_ED2"
 const password = "ytmlDR0qqKiHhGVE"
 const dbName = "proyectoED2"
-
 const uri = `mongodb+srv://${user}:${password}@cluster0.c0tze.mongodb.net/${dbName}?retryWrites=true&w=majority`;
 
 //motor de plantillas
 app.set("view engine", "ejs")
-//motor de plantillas
+
+//directorio de vistas por plantilla
 app.set("views", __dirname+ "/views")
+
+//Usando archivos estaticos
+app.use(express.static(__dirname+"/public"))
 
 mongoose.connect(uri, 
     { 
@@ -35,14 +36,6 @@ app.get('/',(req,res)=>{
     })
 })
 
-// app.get('/:val',(req,res)=>{
-  
-//     res.render('index', {
-//         titulo: "Hola pai",
-//         tagName: req.params.val
-//     })
-//     console.log(req.params.val)
-// })
 
 app.use('/manejo',require('./routes/Manejo'))
 app.use('/productos',require('./routes/Productos'))
@@ -56,7 +49,6 @@ app.use((req,res) => {
         date : Date.now()
         
     })
-    console.log(req.originalUrl)
 })
 
 app.listen(port, () => console.log('ED2  escuchando en el puerto 3000'))
