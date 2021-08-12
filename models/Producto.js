@@ -10,16 +10,3 @@ const Producto =mongoose.model('productos', productoSchema)
 
 module.exports = Producto
 
-// class Producto {
-//     constructor(){
-//         this.id=0
-//         this.Nombre=''
-//         this.Precio =0
-//     }
-
-    
-//     id = Number
-//     Nombre = String
-//     Precio = Number
-// }
-

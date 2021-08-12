@@ -28,7 +28,9 @@ router.get('/', async (req,res)=>{
         const productosBD = await ProductBD.find()
         // console.log(ValidarArchivo())
         // const lista = JSON.parse(LeerArcihvo())
-        res.status(202).send(productosBD)
+        res.status(202).render('productos',{
+            productosArray : productosBD
+        })
 
     } catch (error) {
         res.status(502).send(`error: ${error}`)
